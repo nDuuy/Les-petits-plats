@@ -13,28 +13,36 @@ function searchBar(recipesList) {
   // listen search bar input
   searchInput.addEventListener("keyup", (e) => {
     const input = lowerCaseNormalize(e.target.value);
-    // get filtered recipes object
-    let filteredRecipies = recipesList.filter((recipe) => {
-      const recipeIngredients = recipe.ingredients.map((element) => element.ingredient).toString();
-      return (
-        lowerCaseNormalize(recipe.name).includes(input) ||
-        lowerCaseNormalize(recipeIngredients).includes(input) ||
-        lowerCaseNormalize(recipe.description).includes(input)
-      );
-    });
 
-    // displays recipes under conditions
+    // get filtered recipes
+    let filteredRecipies = [];
+
+    for (let i = 0; i < recipesList.length; i++) {
+      const namesList = lowerCaseNormalize(recipesList[i].name).includes(input);
+      const descriptionsList = lowerCaseNormalize(recipesList[i].description).includes(input);
+      let ingredientsList = [];
+
+      for (let j = 0; j < recipesList[i].ingredients.length; j++) {
+        ingredientsList = lowerCaseNormalize(recipesList[i].ingredients[j].ingredient).includes(
+          input
+        );
+      }
+
+      if (namesList || descriptionsList || ingredientsList) {
+        filteredRecipies.push(recipesList[i]);
+      }
+    }
     if (input.length >= 3) {
+      // displays recipes under conditions
       if (filteredRecipies.length > 0) {
-        recipesList = filteredRecipies;
-        displayRecipes(recipesList);
-        generateFiltersLists(recipesList);
-        searchOnFiltersList(recipesList, generateFiltersLists);
+        displayRecipes(filteredRecipies);
+        generateFiltersLists(filteredRecipies);
+        searchOnFiltersList(filteredRecipies, generateFiltersLists);
       } else {
         recipesSection.innerHTML =
           '<div class="missing">Aucune recette ne correspond à votre critère… <br />Vous pouvez chercher « tarte aux pommes », « poisson », etc.</div>';
-        generateFiltersLists(recipesList);
-        searchOnFiltersList(recipesList, generateFiltersLists);
+        generateFiltersLists(filteredRecipies);
+        searchOnFiltersList(filteredRecipies, generateFiltersLists);
       }
     } else if (input.length <= 3) {
       recipesList = recipes;

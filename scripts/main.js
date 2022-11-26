@@ -1,6 +1,6 @@
 import { recipes } from "./data/recipes.js";
 import { RecipesCard } from "./utils/constructor.js";
-import { searchBar } from "./utils/searchBar.js";
+// import { searchBar } from "./utils/searchBar.js";
 import { init, createFiltersLists } from "./utils/filters.js";
 
 export { lowerCaseNormalize, displayRecipes, generateFiltersLists };
