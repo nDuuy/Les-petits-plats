@@ -5,7 +5,7 @@ import { init, createFiltersLists } from "./utils/filters.js";
 
 export { lowerCaseNormalize, displayRecipes, generateFiltersLists };
 
-//// get recipes list (original + updated) and launch init ////
+//// get recipes list and launch init ////
 
 function getData(recipesList) {
   recipesList = data();

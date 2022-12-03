@@ -30,7 +30,7 @@ function createFiltersLists(recipesList, ingredientsList, appliancesList, ustens
   displayTags(recipesList);
 }
 
-// pattern
+// create elements in pattern
 
 function filtersListPattern(ElementList, ElementListcontent) {
   ElementList.forEach((element) => {
@@ -63,6 +63,7 @@ function searchOnFiltersList(recipesList, generateFiltersLists) {
           filtersItems.ustensilsList
         );
       }
+
       if (targetFilter.includes("appliances")) {
         const searchInput = lowerCaseNormalize(e.target.value);
         const filteredAppliances = filtersItems.appliancesList.filter((appliance) => {
@@ -162,7 +163,7 @@ function displayListsInit() {
 
 let tagsArray = [];
 
-// tag pattern
+// create tag pattern
 
 function createTag(item) {
   const tag = document.createElement("div");
@@ -175,18 +176,12 @@ function createTag(item) {
   closeBtn.src = "./images/close.svg";
   closeBtn.setAttribute("data-item", item);
 
+  // create elements
   tag.appendChild(text);
   tag.appendChild(closeBtn);
   return tag;
 }
 
-// prevent redisplaying the entire array list
-
-function resetTags() {
-  document.querySelectorAll(".tag-item").forEach(function (tag) {
-    tag.parentElement.removeChild(tag);
-  });
-}
 
 // create tags from tag pattern
 
@@ -199,19 +194,11 @@ function addTags() {
   });
 }
 
-// display tags, launch function to filter recipes display
+// prevent redisplaying the entire array list
 
-function displayTags(recipesList) {
-  let listItems = document.querySelectorAll(".list-item");
-  listItems.forEach((item) => {
-    item.addEventListener("click", (e) => {
-      const selectItem = e.target.innerHTML;
-      if (!tagsArray.includes(selectItem)) {
-        tagsArray.push(selectItem);
-      }
-      addTags();
-      displayByTagSearch(recipesList);
-    });
+function resetTags() {
+  document.querySelectorAll(".tag-item").forEach(function (tag) {
+    tag.parentElement.removeChild(tag);
   });
 }
 
@@ -229,12 +216,30 @@ function removeTags(recipesList) {
   });
 }
 
+// display tags, launch function to filter recipes display
+
+function displayTags(recipesList) {
+  let listItems = document.querySelectorAll(".list-item");
+  listItems.forEach((item) => {
+    // on click add selected tag to filtre search bar
+    item.addEventListener("click", (e) => {
+      const selectItem = e.target.innerHTML;
+      if (!tagsArray.includes(selectItem)) {
+        tagsArray.push(selectItem);
+      }
+      addTags();
+      displayByTagSearch(recipesList);
+    });
+  });
+}
+
 //// displays the recipes containing the displayed tags ////
 
 function displayByTagSearch(recipesList) {
   const recipesSection = document.getElementById("recipes");
   const tags = document.querySelectorAll(".tag-item");
   const filters = Array.from(tags);
+
   const filteredFilters = recipesList.filter((recipe) => {
     return filters.every((item) => {
       const formatedItem = lowerCaseNormalize(item.textContent);
@@ -249,6 +254,7 @@ function displayByTagSearch(recipesList) {
       );
     });
   });
+
   if (filteredFilters.length) {
     recipesSection.innerHTML = "";
     displayRecipes(filteredFilters);
